@@ -28,25 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.controlsBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.approximatingFunctionList = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.numberOfNodesUpDown = new System.Windows.Forms.NumericUpDown();
             this.calculateButton = new System.Windows.Forms.Button();
             this.resetButton = new System.Windows.Forms.Button();
-            this.consoleBox = new System.Windows.Forms.GroupBox();
-            this.legendBox = new System.Windows.Forms.GroupBox();
-            this.graphsBox = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.nodesData = new System.Windows.Forms.DataGridView();
             this.X = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.consoleBox = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.graphsBox = new System.Windows.Forms.GroupBox();
+            this.plotsArea = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.controlsBox.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfNodesUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nodesData)).BeginInit();
+            this.consoleBox.SuspendLayout();
+            this.graphsBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.plotsArea)).BeginInit();
             this.SuspendLayout();
             // 
             // controlsBox
@@ -72,8 +80,8 @@
             this.tableLayoutPanel1.Controls.Add(this.numberOfNodesUpDown, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.calculateButton, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.resetButton, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.nodesData, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.nodesData, 1, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 12);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 8;
@@ -85,6 +93,8 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(448, 342);
@@ -99,30 +109,19 @@
             "f=a*ln(x)+b",
             "f=a*x^2+b*x+c"});
             this.approximatingFunctionList.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.approximatingFunctionList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.approximatingFunctionList.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.approximatingFunctionList.Items.AddRange(new object[] {
-            "f=a*x+b",
-            "f=a*x^b",
-            "f=a*e^(b*x)",
-            "f=a*ln(x)+b",
-            "f=a*x^2+b*x+c"});
+            "y=a*x+b",
+            "y=a*x^b",
+            "y=a*e^(b*x)",
+            "y=a*ln(x)+b",
+            "y=a*x^2+b*x+c"});
             this.approximatingFunctionList.Location = new System.Drawing.Point(60, 50);
             this.approximatingFunctionList.Margin = new System.Windows.Forms.Padding(60, 8, 3, 3);
             this.approximatingFunctionList.Name = "approximatingFunctionList";
             this.approximatingFunctionList.Size = new System.Drawing.Size(111, 28);
             this.approximatingFunctionList.TabIndex = 2;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(28, 6);
-            this.label1.Margin = new System.Windows.Forms.Padding(28, 6, 3, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(170, 32);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Selecting an approximating function";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label2
             // 
@@ -155,7 +154,7 @@
             0,
             0,
             0});
-            this.numberOfNodesUpDown.ValueChanged += new System.EventHandler(this.numberOfNodesUpDown_ValueChanged);
+            this.numberOfNodesUpDown.ValueChanged += new System.EventHandler(this.NumberOfNodesUpDown_ValueChanged);
             // 
             // calculateButton
             // 
@@ -169,6 +168,7 @@
             this.calculateButton.TabIndex = 6;
             this.calculateButton.Text = "Calculate";
             this.calculateButton.UseVisualStyleBackColor = false;
+            this.calculateButton.Click += new System.EventHandler(this.calculateButton_Click);
             // 
             // resetButton
             // 
@@ -183,45 +183,41 @@
             this.resetButton.Text = "Reset";
             this.resetButton.UseVisualStyleBackColor = false;
             // 
-            // consoleBox
+            // label1
             // 
-            this.consoleBox.Location = new System.Drawing.Point(2, 360);
-            this.consoleBox.Name = "consoleBox";
-            this.consoleBox.Size = new System.Drawing.Size(460, 139);
-            this.consoleBox.TabIndex = 1;
-            this.consoleBox.TabStop = false;
-            this.consoleBox.Text = "Console";
-            // 
-            // legendBox
-            // 
-            this.legendBox.Location = new System.Drawing.Point(468, 0);
-            this.legendBox.Name = "legendBox";
-            this.legendBox.Size = new System.Drawing.Size(594, 90);
-            this.legendBox.TabIndex = 2;
-            this.legendBox.TabStop = false;
-            this.legendBox.Text = "Legend";
-            // 
-            // graphsBox
-            // 
-            this.graphsBox.Location = new System.Drawing.Point(468, 90);
-            this.graphsBox.Name = "graphsBox";
-            this.graphsBox.Size = new System.Drawing.Size(594, 409);
-            this.graphsBox.TabIndex = 3;
-            this.graphsBox.TabStop = false;
-            this.graphsBox.Text = "Graphs";
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(28, 6);
+            this.label1.Margin = new System.Windows.Forms.Padding(28, 6, 3, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(170, 32);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Selecting an approximating function";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // nodesData
             // 
+            this.nodesData.AllowUserToAddRows = false;
+            this.nodesData.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Snow;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlLightLight;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.nodesData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.nodesData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.nodesData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.X,
             this.Y});
-            this.nodesData.Location = new System.Drawing.Point(229, 10);
-            this.nodesData.Margin = new System.Windows.Forms.Padding(5, 10, 5, 5);
+            this.nodesData.Location = new System.Drawing.Point(227, 12);
+            this.nodesData.Margin = new System.Windows.Forms.Padding(3, 12, 3, 3);
             this.nodesData.Name = "nodesData";
             this.tableLayoutPanel1.SetRowSpan(this.nodesData, 8);
-            this.nodesData.Size = new System.Drawing.Size(214, 320);
+            this.nodesData.Size = new System.Drawing.Size(218, 309);
             this.nodesData.TabIndex = 8;
+            this.nodesData.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.NodesData_DataError);
             // 
             // X
             // 
@@ -229,7 +225,6 @@
             this.X.HeaderText = "X";
             this.X.MinimumWidth = 75;
             this.X.Name = "X";
-            this.X.ReadOnly = true;
             this.X.Width = 75;
             // 
             // Y
@@ -238,8 +233,58 @@
             this.Y.HeaderText = "Y";
             this.Y.MinimumWidth = 75;
             this.Y.Name = "Y";
-            this.Y.ReadOnly = true;
             this.Y.Width = 75;
+            // 
+            // consoleBox
+            // 
+            this.consoleBox.Controls.Add(this.textBox1);
+            this.consoleBox.Location = new System.Drawing.Point(2, 360);
+            this.consoleBox.Name = "consoleBox";
+            this.consoleBox.Size = new System.Drawing.Size(460, 139);
+            this.consoleBox.TabIndex = 1;
+            this.consoleBox.TabStop = false;
+            this.consoleBox.Text = "Console";
+            // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.SystemColors.ControlText;
+            this.textBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox1.ForeColor = System.Drawing.SystemColors.Menu;
+            this.textBox1.Location = new System.Drawing.Point(6, 19);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(448, 114);
+            this.textBox1.TabIndex = 0;
+            this.textBox1.Text = "Тест текста\r\nLupus in fabula; area mediocritas; quot erad demonstrandum\r\nGuademus" +
+    " igitur, amat victoria curam";
+            // 
+            // graphsBox
+            // 
+            this.graphsBox.Controls.Add(this.plotsArea);
+            this.graphsBox.Location = new System.Drawing.Point(468, 0);
+            this.graphsBox.Name = "graphsBox";
+            this.graphsBox.Size = new System.Drawing.Size(594, 499);
+            this.graphsBox.TabIndex = 3;
+            this.graphsBox.TabStop = false;
+            this.graphsBox.Text = "Plots";
+            // 
+            // plotsArea
+            // 
+            this.plotsArea.BackColor = System.Drawing.SystemColors.Window;
+            chartArea1.Name = "ChartArea1";
+            this.plotsArea.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.plotsArea.Legends.Add(legend1);
+            this.plotsArea.Location = new System.Drawing.Point(6, 18);
+            this.plotsArea.Name = "plotsArea";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.plotsArea.Series.Add(series1);
+            this.plotsArea.Size = new System.Drawing.Size(582, 475);
+            this.plotsArea.TabIndex = 0;
+            this.plotsArea.Text = "Plots";
             // 
             // Form1
             // 
@@ -248,7 +293,6 @@
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1064, 501);
             this.Controls.Add(this.graphsBox);
-            this.Controls.Add(this.legendBox);
             this.Controls.Add(this.consoleBox);
             this.Controls.Add(this.controlsBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -260,6 +304,10 @@
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfNodesUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nodesData)).EndInit();
+            this.consoleBox.ResumeLayout(false);
+            this.consoleBox.PerformLayout();
+            this.graphsBox.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.plotsArea)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -268,7 +316,6 @@
 
         private System.Windows.Forms.GroupBox controlsBox;
         private System.Windows.Forms.GroupBox consoleBox;
-        private System.Windows.Forms.GroupBox legendBox;
         private System.Windows.Forms.GroupBox graphsBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ComboBox approximatingFunctionList;
@@ -277,6 +324,8 @@
         private System.Windows.Forms.NumericUpDown numberOfNodesUpDown;
         private System.Windows.Forms.Button calculateButton;
         private System.Windows.Forms.Button resetButton;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.DataVisualization.Charting.Chart plotsArea;
         private System.Windows.Forms.DataGridView nodesData;
         private System.Windows.Forms.DataGridViewTextBoxColumn X;
         private System.Windows.Forms.DataGridViewTextBoxColumn Y;
