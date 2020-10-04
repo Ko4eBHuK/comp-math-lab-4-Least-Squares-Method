@@ -21,13 +21,6 @@ namespace LeastSquaresMethod
         
         public int NodeWithMaximumDeviationIndex { get; set; }
         public bool MaximumNodeDeviationExistence { get; set; }
-        //public double[] EditedDeviationSums { get; set; }
-        //public double EditedCorrelationCoefficient { get; set; }
-        //public double EditedRootMeanSquareDeviation { get; set; }
-        //private double[,] EditedDeterminantCells = new double[0, 0];
-        //public double[,] EditedNodesTable { get; set; }
-        //public double[] EditedResultСoefficients { get; set; }
-        //public double EditedMeasureOfDeviation { get; set; }
 
         public LeastSquaresMethodRealisation(int approximatinFunctionIndex, double[,] nodesTable, int nodesCount)
         {
@@ -84,8 +77,8 @@ namespace LeastSquaresMethod
                                              DeterminantCells[0, 2] * DeterminantCells[1, 0]) / GetDeterminant();
                 }
 
-                //преобразование коэфов, если требуется
-                if(ApproximatinFunctionIndex == 1 | ApproximatinFunctionIndex == 2)
+                //преобразование коэффициентов, если требуется
+                if (ApproximatinFunctionIndex == 1 | ApproximatinFunctionIndex == 2)
                 {
                     ResultСoefficients[1] = Math.Pow(Math.E, ResultСoefficients[1]);
                 }
