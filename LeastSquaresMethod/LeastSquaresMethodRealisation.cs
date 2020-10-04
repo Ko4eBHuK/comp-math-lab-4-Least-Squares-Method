@@ -17,6 +17,17 @@ namespace LeastSquaresMethod
         public int ApproximatinFunctionIndex { get; set; }
         public bool SolutionExistence { get; set; }
         private double[,] DeterminantCells = new double[0, 0];
+        public double [] DeviationSums { get; set; }
+        
+        public int NodeWithMaximumDeviationIndex { get; set; }
+        public bool MaximumNodeDeviationExistence { get; set; }
+        //public double[] EditedDeviationSums { get; set; }
+        //public double EditedCorrelationCoefficient { get; set; }
+        //public double EditedRootMeanSquareDeviation { get; set; }
+        //private double[,] EditedDeterminantCells = new double[0, 0];
+        //public double[,] EditedNodesTable { get; set; }
+        //public double[] EditedResultСoefficients { get; set; }
+        //public double EditedMeasureOfDeviation { get; set; }
 
         public LeastSquaresMethodRealisation(int approximatinFunctionIndex, double[,] nodesTable, int nodesCount)
         {
@@ -81,9 +92,11 @@ namespace LeastSquaresMethod
 
                 //вычисление суммы квадратов отклонений S
                 MeasureOfDeviation = 0;
+                DeviationSums = new double[NodesCount];
                 for(int i = 0; i < NodesCount; i++)
                 {
-                    MeasureOfDeviation += Math.Pow(GetFiValueInPoint(NodesTable[0, i]) - NodesTable[1, i], 2);
+                    DeviationSums[i] = Math.Pow(GetFiValueInPoint(NodesTable[0, i]) - NodesTable[1, i], 2);
+                    MeasureOfDeviation += DeviationSums[i];
                 }
 
                 //вычисление коэффициента корелляции
@@ -106,6 +119,26 @@ namespace LeastSquaresMethod
 
                 //вычисление среднеквадратичного отклонения
                 RootMeanSquareDeviation = Math.Pow(MeasureOfDeviation / NodesCount, 0.5);
+
+                //существование точки с наибольшим отклонением
+                int m = 1;
+                MaximumNodeDeviationExistence = false;
+                while (!MaximumNodeDeviationExistence & m < NodesCount)
+                {
+                    MaximumNodeDeviationExistence = DeviationSums[0] != DeviationSums[m];
+                    m++;
+                }
+
+                //вычисление точки с наибольшим отклоеннием
+                if (MaximumNodeDeviationExistence)
+                {
+                    NodeWithMaximumDeviationIndex = 0;
+                    for (int i = 1; i < NodesCount; i++)
+                    {
+                        if (DeviationSums[i] > DeviationSums[NodeWithMaximumDeviationIndex]) NodeWithMaximumDeviationIndex = i;
+                    }
+                }
+
             }
         }
 
@@ -205,7 +238,7 @@ namespace LeastSquaresMethod
                     fiValue = ResultСoefficients[0] * x + ResultСoefficients[1];
                     break;
                 case 1:
-                    fiValue = ResultСoefficients[0] * Math.Pow(x, ResultСoefficients[1]);
+                    fiValue = ResultСoefficients[1] * Math.Pow(x, ResultСoefficients[0]);
                     break;
                 case 2:
                     fiValue = ResultСoefficients[1] * Math.Pow(Math.E, ResultСoefficients[0] * x);
