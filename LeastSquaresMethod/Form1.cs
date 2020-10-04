@@ -20,20 +20,6 @@ namespace LeastSquaresMethod
             InitializeComponent();
 
             UpdatePlotsArea(10, -10, 10, -10);
-
-            //double x = -10;
-            double y;
-            Series sinePlot = new Series();
-            sinePlot.LegendText = "y=sin(x)";
-            sinePlot.ChartType = SeriesChartType.Spline;
-            sinePlot.BorderWidth = 2;
-            sinePlot.Color = Color.Red;
-            for (int i = -10; i <= 10; i++)
-            {
-                y = Math.Sin(i);
-                sinePlot.Points.AddXY(i, y);
-            }
-            plotsArea.Series.Add(sinePlot);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -101,14 +87,18 @@ namespace LeastSquaresMethod
 
         private void calculateButton_Click(object sender, EventArgs e)
         {
+            //вводные данные
+            int approximatingFunctionIndex = approximatingFunctionList.SelectedIndex;
+            int nodesCount = (int)numberOfNodesUpDown.Value;
+
             //занесение данных из таблицы узлов в поле
-            //попутное нахождение максимумов и минимумов
+            //попутное нахождение максимумов и минимумов для графика
             NodesTable = new double[2, nodesData.RowCount];
             double minX = 10, maxX = -10, minY = 10, maxY = -10;
             for (int i = 0; i < nodesData.RowCount; i++)
             {
-                NodesTable[0, i] = Double.Parse(nodesData[0, i].Value.ToString().Replace(",","."));
-                NodesTable[1, i] = Double.Parse(nodesData[1, i].Value.ToString().Replace(",", "."));
+                NodesTable[0, i] = Double.Parse(nodesData[0, i].Value.ToString());
+                NodesTable[1, i] = Double.Parse(nodesData[1, i].Value.ToString());
 
                 if (NodesTable[0, i] < minX)
                     minX = NodesTable[0, i];
@@ -120,20 +110,122 @@ namespace LeastSquaresMethod
                     maxY = NodesTable[1, i];
             }
 
+            if(minX == maxX)
+            {
+                minX = -10;
+                maxX = 10;
+            }
+            if (minY == maxY)
+            {
+                minY = -10;
+                maxY = 10;
+            }
+
             //обновление области графика в соответсвии с данными
+            plotsArea.Series.Clear();
             UpdatePlotsArea(maxX, minX, maxY, minY);
 
-            //нанесение узлов на график
-            Series nodes = new Series();
-            nodes.LegendText = "Nodes";
-            nodes.ChartType = SeriesChartType.Point;
-            nodes.Color = Color.DarkViolet;
-            for (int i = 0; i < nodesData.RowCount; i++)
-            {
-                nodes.Points.AddXY(NodesTable[0, i], NodesTable[1, i]);
-            }
-            plotsArea.Series.Add(nodes);
+            //вычисление коэффициентов МНК
+            var solution = new LeastSquaresMethodRealisation(approximatingFunctionIndex, NodesTable, nodesCount);
 
+            if (solution.SolutionExistence)
+            {
+                //соритруем узлы
+                double xContainer, yContainer;
+                for(int i = 0; i < nodesCount - 1; i++)
+                {
+                    for(int j = i + 1; j < nodesCount; j++)
+                    {
+                        if (NodesTable[0, i] < NodesTable[0, j])
+                        {
+                            xContainer = NodesTable[0, i];
+                            yContainer = NodesTable[1, i];
+
+                            NodesTable[0, i] = NodesTable[0, j];
+                            NodesTable[1, i] = NodesTable[1, j];
+
+                            NodesTable[0, j] = xContainer;
+                            NodesTable[1, j] = yContainer;
+                        }
+                    }
+                }
+
+                //нанесение узлов на график
+                Series nodes = new Series();
+                nodes.LegendText = "Nodes";
+                nodes.ChartType = SeriesChartType.Point;
+                nodes.Color = Color.DarkViolet;
+                for (int i = 0; i < nodesData.RowCount; i++)
+                {
+                    nodes.Points.AddXY(NodesTable[0, i], NodesTable[1, i]);
+                }
+                plotsArea.Series.Add(nodes);
+
+                //рисование первого графика, до исключения точки с наибольшим отклонением
+                Series plot1 = new Series();
+                plot1.LegendText = "Plot 1";
+                plot1.ChartType = SeriesChartType.Spline;
+                plot1.BorderWidth = 2;
+                plot1.Color = Color.Blue;
+                double x;
+                double y;
+                for (int i = 0; i < nodesCount; i++)
+                {
+                    x = NodesTable[0, i];
+                    y = 0;
+                    switch (approximatingFunctionIndex)
+                    {
+                        case 0:
+                            y = solution.ResultСoefficients[0] * x + solution.ResultСoefficients[1];
+                            break;
+                        case 1:
+                            y = solution.ResultСoefficients[1] * Math.Pow(x, solution.ResultСoefficients[0]);
+                            break;
+                        case 2:
+                            y = solution.ResultСoefficients[1] * Math.Pow(Math.E, x * solution.ResultСoefficients[0]);
+                            break;
+                        case 3:
+                            y = solution.ResultСoefficients[0] * Math.Log(x) + solution.ResultСoefficients[1];
+                            break;
+                        case 4:
+                            y = solution.ResultСoefficients[0] * x * x + solution.ResultСoefficients[1] * x + solution.ResultСoefficients[2];
+                            break;
+                    }
+                    plot1.Points.AddXY(x, y);
+                }
+                plotsArea.Series.Add(plot1);
+
+                //вывод вычисленных данных
+                outputConsole.AppendText("Approximating function before excluding the point with maximum deviation:\r\n");
+                switch (approximatingFunctionIndex)
+                {
+                    case 0:
+                        outputConsole.AppendText("y1 = " + Math.Round(solution.ResultСoefficients[0], 6) + "*x + " + Math.Round(solution.ResultСoefficients[1], 6) + "\r\n");
+                        break;
+                    case 1:
+                        outputConsole.AppendText("y1 = " + Math.Round(solution.ResultСoefficients[1], 6) + "*x^" + Math.Round(solution.ResultСoefficients[0], 6) + "\r\n");
+                        break;
+                    case 2:
+                        outputConsole.AppendText("y1 = " + Math.Round(solution.ResultСoefficients[1], 6) + "*e^(" + Math.Round(solution.ResultСoefficients[0], 6) + "*x)\r\n");
+                        break;
+                    case 3:
+                        outputConsole.AppendText("y1 = " + Math.Round(solution.ResultСoefficients[0], 6) + "*ln(x) + " + Math.Round(solution.ResultСoefficients[1], 6) + "\r\n");
+                        break;
+                    case 4:
+                        outputConsole.AppendText("y1 = " + Math.Round(solution.ResultСoefficients[0], 6) + "*x^2 + " + Math.Round(solution.ResultСoefficients[1], 6) + "*x + " + Math.Round(solution.ResultСoefficients[2], 6) + "\r\n");
+                        break;
+                }
+                outputConsole.AppendText("Measure of deviation: " + Math.Round(solution.MeasureOfDeviation, 6) + "\r\n");
+                outputConsole.AppendText("Correlation coefficient: " + Math.Round(solution.CorrelationCoefficient, 6) + "\r\n");
+                outputConsole.AppendText("Root mean square deviation: " + Math.Round(solution.RootMeanSquareDeviation, 6) + "\r\n");
+                outputConsole.AppendText("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n");
+
+            }
+            else
+            {
+                outputConsole.AppendText("Impossible to calculate the coefficients\r\nwith these inputs\r\n" +
+                                      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n");
+            }
 
         }
     }

@@ -45,7 +45,7 @@
             this.X = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.consoleBox = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.outputConsole = new System.Windows.Forms.TextBox();
             this.graphsBox = new System.Windows.Forms.GroupBox();
             this.plotsArea = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.controlsBox.SuspendLayout();
@@ -237,7 +237,7 @@
             // 
             // consoleBox
             // 
-            this.consoleBox.Controls.Add(this.textBox1);
+            this.consoleBox.Controls.Add(this.outputConsole);
             this.consoleBox.Location = new System.Drawing.Point(2, 360);
             this.consoleBox.Name = "consoleBox";
             this.consoleBox.Size = new System.Drawing.Size(460, 139);
@@ -245,19 +245,18 @@
             this.consoleBox.TabStop = false;
             this.consoleBox.Text = "Console";
             // 
-            // textBox1
+            // outputConsole
             // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.ControlText;
-            this.textBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox1.ForeColor = System.Drawing.SystemColors.Menu;
-            this.textBox1.Location = new System.Drawing.Point(6, 19);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(448, 114);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.Text = "Тест текста\r\nLupus in fabula; area mediocritas; quot erad demonstrandum\r\nGuademus" +
-    " igitur, amat victoria curam";
+            this.outputConsole.BackColor = System.Drawing.SystemColors.ControlText;
+            this.outputConsole.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.outputConsole.ForeColor = System.Drawing.SystemColors.Menu;
+            this.outputConsole.Location = new System.Drawing.Point(6, 19);
+            this.outputConsole.Multiline = true;
+            this.outputConsole.Name = "outputConsole";
+            this.outputConsole.ReadOnly = true;
+            this.outputConsole.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.outputConsole.Size = new System.Drawing.Size(448, 114);
+            this.outputConsole.TabIndex = 0;
             // 
             // graphsBox
             // 
@@ -324,7 +323,7 @@
         private System.Windows.Forms.NumericUpDown numberOfNodesUpDown;
         private System.Windows.Forms.Button calculateButton;
         private System.Windows.Forms.Button resetButton;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox outputConsole;
         private System.Windows.Forms.DataVisualization.Charting.Chart plotsArea;
         private System.Windows.Forms.DataGridView nodesData;
         private System.Windows.Forms.DataGridViewTextBoxColumn X;
