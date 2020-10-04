@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LeastSquaresMethod
 {
@@ -18,7 +14,6 @@ namespace LeastSquaresMethod
         public bool SolutionExistence { get; set; }
         private double[,] DeterminantCells = new double[0, 0];
         public double [] DeviationSums { get; set; }
-        
         public int NodeWithMaximumDeviationIndex { get; set; }
         public bool MaximumNodeDeviationExistence { get; set; }
 
