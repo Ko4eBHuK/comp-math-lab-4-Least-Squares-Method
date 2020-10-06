@@ -83,6 +83,7 @@ namespace LeastSquaresMethod
             //вводные данные
             int approximatingFunctionIndex = approximatingFunctionList.SelectedIndex;
             int nodesCount = (int)numberOfNodesUpDown.Value;
+            nodesData.Sort(nodesData.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
 
             //занесение данных из таблицы узлов в поле
             //проверки на возможность поиска аппроксимирующих коэффициентов
@@ -140,25 +141,6 @@ namespace LeastSquaresMethod
 
             if (solution.SolutionExistence)
             {
-                //соритруем узлы
-                double xContainer, yContainer;
-                for(int i = 0; i < nodesCount - 1; i++)
-                {
-                    for(int j = i + 1; j < nodesCount; j++)
-                    {
-                        if (NodesTable[0, i] > NodesTable[0, j])
-                        {
-                            xContainer = NodesTable[0, i];
-                            yContainer = NodesTable[1, i];
-
-                            NodesTable[0, i] = NodesTable[0, j];
-                            NodesTable[1, i] = NodesTable[1, j];
-
-                            NodesTable[0, j] = xContainer;
-                            NodesTable[1, j] = yContainer;
-                        }
-                    }
-                }
 
                 //рисование первого графика, до исключения точки с наибольшим отклонением
                 Series plot1 = new Series();
